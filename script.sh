@@ -102,4 +102,10 @@ for DIR in $DIRECTORIES; do
     echo "Directory: $BASENAME synced successfully"
 done
 
+# Rsync nginx vhosts directory
+echo "Syncing nginx vhosts directory..."
+sshpass -p $SERVER1_PASS rsync -avz --append --progress -e "ssh -p $SERVER1_PORT" $SERVER1_USER@$SERVER1_IP:/etc/nginx/vhosts $SERVER2_USER@$SERVER2_IP:/etc/nginx/vhosts/
+die_on_fail "Failed to sync nginx vhosts directory"
+echo "Nginx vhosts directory synced successfully"
+
 echo "Script execution completed successfully!"
