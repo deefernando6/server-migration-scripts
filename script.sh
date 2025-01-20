@@ -83,6 +83,12 @@ for DB in $DATABASES; do
     echo "Database: $DB sourced successfully"
 done
 
+# Source MySQL users on Server2
+echo "Sourcing MySQL users on Server2..."
+$SSH_SERVER2 "mysql < $SERVER2_DUMP_DIR/mysql_users.sql"
+die_on_fail "Failed to source MySQL users"
+echo "MySQL users sourced successfully"
+
 # Step 4: Rsync directories from Server1 to Server2
 echo "Starting rsync of directories from Server1 ($SERVER1_IP) to Server2 ($SERVER2_IP)..."
 DIRECTORIES=$($SSH_SERVER1 "ls -d $SERVER1_DIR/*/")
