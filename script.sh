@@ -64,6 +64,12 @@ for DB in $DATABASES; do
     echo "Dump of database: $DB transferred successfully"
 done
 
+# Transfer MySQL users dump
+echo "Transferring MySQL users dump..."
+sshpass -p $SERVER1_PASS scp -P $SERVER1_PORT $SERVER1_USER@$SERVER1_IP:$DUMP_DIR/mysql_users.sql $SERVER2_USER@$SERVER2_IP:$SERVER2_DUMP_DIR/
+die_on_fail "Failed to transfer MySQL users dump"
+echo "MySQL users dump transferred successfully"
+
 # Step 3: Source all databases on Server2
 echo "Starting to source databases on Server2..."
 for DB in $DATABASES; do
