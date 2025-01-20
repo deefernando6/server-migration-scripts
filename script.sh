@@ -49,6 +49,12 @@ for DB in $DATABASES; do
     echo "Dump of database: $DB completed successfully"
 done
 
+# Export MySQL users
+echo "Exporting MySQL users from Server1..."
+$SSH_SERVER1 "mysql -u root -ppassword -e 'SELECT CONCAT(\"CREATE USER '\", user, \"'@'\", host, \"' IDENTIFIED BY PASSWORD '\", authentication_string, \"';\") FROM mysql.user;' > $DUMP_DIR/mysql_users.sql"
+die_on_fail "Failed to export MySQL users"
+echo "MySQL users exported successfully"
+
 # Step 2: Transfer all dumps to Server2
 echo "Transferring all dumps to Server2 ($SERVER2_IP)..."
 for DB in $DATABASES; do
