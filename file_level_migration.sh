@@ -23,3 +23,6 @@ done
 
 #Syncing the nginx vhosts from the current server to the migration server
 sshpass -p $SERVER_PASS rsync -av -o --append --progress -e "ssh -p 2112" /etc/nginx/vhosts/ root@$SERVER_IP:/etc/nginx/
+
+#Syncing the apache vhosts from the current server to the migration server
+sshpass -p $SERVER_PASS rsync -av -o --append --progress -e "ssh -p 2112" /etc/httpd/vhosts/ root@$SERVER_IP:/etc/httpd/
