@@ -6,7 +6,7 @@
 read -p "Enter the directory to save database dumps on current server: " DUMP_DIR
 
 # Prompt for the server details
-read -p "Enter the IP address of the migrating server: " SERVER_IP
+read -p "Enter the local IP address of the migrating server: " SERVER_IP
 read -sp "Enter the root password of the migrated server: " SERVER_PASS
 
 # Prompt for the location to save dumps on migrated server
@@ -33,8 +33,9 @@ echo "Exporting MySQL users from the current server..."
 die_on_fail "Failed to export MySQL users"
 echo "MySQL users exported successfully"
 
-#Tranferring all the mysql dumps to the migration server.
+#Tranferring all the mysql dumps and the mysql users to the migration server.
 echo "Transferring MySQL users dump..."
-rsync -avz --append --progress -e "ssh -p 2112" $DUMP_DIR/ root@$SERVER_IP:$MIGRATE_DIR/
+rsync -av -o --append --progress -e "ssh -p 2112" $DUMP_DIR/ root@$SERVER_IP:$MIGRATE_DIR/
 die_on_fail "Failed to transfer MySQL users dump"
 echo "MySQL users dump transferred successfully"
+
