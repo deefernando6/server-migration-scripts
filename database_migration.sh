@@ -39,6 +39,7 @@ done
 
 #Creating the directory to save the mysql user dump
 mkdir -p $DUMP_DIR/mysql_user
+touch $DUMP_DIR/mysql_user/mysql_users.sql
 
 #Exporting MySQL users
 echo "Exporting MySQL users from the current server..."
