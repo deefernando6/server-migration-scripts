@@ -48,7 +48,7 @@ for DB in $DATABASES; do
     die_on_fail "Failed to create database: $DB"
 
     echo "Sourcing dump for database: $DB..."
-    mysql $DB < $DUMP_DIR/${DB}_dump.sql
+    mysql -h 192.168.100.100 -u root -p$DB < $DUMP_DIR/${DB}_dump.sql
     die_on_fail "Failed to source dump for database: $DB"
     echo "Database: $DB sourced successfully"
 done
