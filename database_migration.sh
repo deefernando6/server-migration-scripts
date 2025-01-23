@@ -41,20 +41,20 @@ echo "MySQL users dump transferred successfully"
 
 #Creating the databases and sourcing the databases in the migration server
 
-echo "Starting to source databases on migration server..."
-for DB in $DATABASES; do
-    echo "Creating database: $DB..."
-    mysql -h 192.168.100.100 -u root -p-e 'CREATE DATABASE $DB CHARACTER SET utf8 COLLATE utf8_general_ci;'
-    die_on_fail "Failed to create database: $DB"
-
-    echo "Sourcing dump for database: $DB..."
-    mysql -h 192.168.100.100 -u root -p$DB < $DUMP_DIR/${DB}_dump.sql
-    die_on_fail "Failed to source dump for database: $DB"
-    echo "Database: $DB sourced successfully"
-done
-
-# Source MySQL users on Server2
-echo "Sourcing MySQL users on Server2..."
-mysql -h 192.168.100.100 -u root -p < DUMP_DIR/mysql_users.sql
-die_on_fail "Failed to source MySQL users"
-echo "MySQL users sourced successfully"
+#echo "Starting to source databases on migration server..."
+#for DB in $DATABASES; do
+#    echo "Creating database: $DB..."
+#    mysql -h $SERVER_IP -u root -p-e 'CREATE DATABASE $DB CHARACTER SET utf8 COLLATE utf8_general_ci;'
+#    die_on_fail "Failed to create database: $DB"
+#
+#    echo "Sourcing dump for database: $DB..."
+#    mysql -h $SERVER_IP -u root -p$DB < $DUMP_DIR/${DB}_dump.sql
+#    die_on_fail "Failed to source dump for database: $DB"
+#    echo "Database: $DB sourced successfully"
+#done
+#
+## Source MySQL users on Server2
+#echo "Sourcing MySQL users on Server2..."
+#mysql -h $SERVER_IP -u root -p < DUMP_DIR/mysql_users.sql
+#die_on_fail "Failed to source MySQL users"
+#echo "MySQL users sourced successfully"
