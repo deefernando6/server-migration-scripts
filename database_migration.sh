@@ -27,9 +27,12 @@ for DB in $DATABASES; do
     echo "Dump of database: $DB completed successfully"
 done
 
+#Creating the directory to save the mysql user dump
+mkidr -p $DUMP_DIR/mysql_user
+
 #Exporting MySQL users
 echo "Exporting MySQL users from the current server..."
-"mysql -e -h localhost -u root -p$DBPASS 'SELECT CONCAT(\"CREATE USER '\", user, \"'@'\", host, \"' IDENTIFIED BY PASSWORD '\", authentication_string, \"';\") FROM mysql.user;' > $DUMP_DIR/mysql_users.sql"
+"mysql -e -h localhost -u root -p$DBPASS 'SELECT CONCAT(\"CREATE USER '\", user, \"'@'\", host, \"' IDENTIFIED BY PASSWORD '\", authentication_string, \"';\") FROM mysql.user;' > $DUMP_DIR/mysql_user/mysql_users.sql"
 die_on_fail "Failed to export MySQL users"
 echo "MySQL users exported successfully"
 
