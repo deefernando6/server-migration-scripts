@@ -38,7 +38,7 @@ for DB in $DATABASES; do
 done
 
 #Creating the directory to save the mysql user dump
-mkidr -p $DUMP_DIR/mysql_user
+mkdir -p $DUMP_DIR/mysql_user
 
 #Exporting MySQL users
 echo "Exporting MySQL users from the current server..."
