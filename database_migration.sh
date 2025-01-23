@@ -4,7 +4,7 @@
 
 die_on_fail() {
     if [ $? -ne 0 ]; then
-        echo "Error: $1"
+        echo "Error: $1" >> $LOG_DIR/database_migration.log
     fi
 }
 # Prompt for the location to save dumps on the current server
@@ -17,6 +17,11 @@ read -sp "Enter the root user password of the migrated server: " SERVER_PASS
 # Prompt for the location to save dumps on migrated server
 read -p "Enter the directory to save database dumps on migrated server: " MIGRATE_DIR
 
+# Prompt for the location to keep the log on the server
+read -p "Enter the directory to save the log on migrated server: " LOG_DIR
+
+#Creating the log files
+touch $LOG_DIR/database_migration.log
 
 # Take dumps of all MariaDB databases on the current server
 echo "Fetching database list from the current server"
@@ -29,7 +34,7 @@ for DB in $DATABASES; do
     echo "Taking dump of database: $DB..."
     mysqldump -h localhost -u root -p$DBPASS --triggers --routines --events --hex-blob $DB | sed 's/\`$DB\`\.//g' > $DUMP_DIR/${DB}_dump.sql
     die_on_fail "Failed to take dump of database: $DB"
-    echo "Dump of database: $DB completed successfully"
+    echo "Dump of database: $DB completed successfully" >> $LOG_DIR/database_migration.log
 done
 
 #Creating the directory to save the mysql user dump
@@ -39,13 +44,13 @@ mkidr -p $DUMP_DIR/mysql_user
 echo "Exporting MySQL users from the current server..."
 "mysql -e -h localhost -u root -p$DBPASS 'SELECT CONCAT(\"CREATE USER '\", user, \"'@'\", host, \"' IDENTIFIED BY PASSWORD '\", authentication_string, \"';\") FROM mysql.user;' > $DUMP_DIR/mysql_user/mysql_users.sql"
 die_on_fail "Failed to export MySQL users"
-echo "MySQL users exported successfully"
+echo "MySQL users exported successfully" >> $LOG_DIR/database_migration.log
 
 #Tranferring all the mysql dumps and the mysql users to the migration server.
 echo "Transferring MySQL users dump..."
 sshpass -p $SERVER_PASS rsync -av -o --append --progress -e "ssh -p 2112" $DUMP_DIR/ root@$SERVER_IP:$DUMP_DIR/
 die_on_fail "Failed to transfer MySQL users dump"
-echo "MySQL users dump transferred successfully"
+echo "MySQL users dump transferred successfully" >> $LOG_DIR/database_migration.log
 
 #Creating the databases and sourcing the databases in the migration server
 
