@@ -7,7 +7,7 @@ read -p "Enter the directory to save database dumps on current server: " DUMP_DI
 read -sp "Enter the mysql mysql root password of the migrated server: " DBPASS
 # Prompt for the server details
 read -p "Enter the local IP address of the migrating server: " SERVER_IP
-read -sp "Enter the mysql root user password of the migrated server: " SERVER_PASS
+read -sp "Enter the root user password of the migrated server: " SERVER_PASS
 
 # Prompt for the location to save dumps on migrated server
 read -p "Enter the directory to save database dumps on migrated server: " MIGRATE_DIR
