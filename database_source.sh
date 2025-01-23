@@ -2,9 +2,17 @@
 
 # Make sure to execute this script as root
 
+die_on_fail() {
+    if [ $? -ne 0 ]; then
+        echo "Error: $1"
+    fi
+}
 # Prompt for the location to save dumps on the current server
 read -p "Enter the directory where you keep the database dumps: " DUMP_DIR
 read -sp "Enter the mysql mysql root password of the migrated server: " DBPASS
+
+#Getting the db names
+DATABASES=($($DUMP_DIR/basename -s .sql *.sql))
 
 # Sourcing the databases
 for DB in $DATABASES; do
@@ -20,6 +28,6 @@ done
 
 # Source MySQL users on Server2
 echo "Sourcing MySQL users on Server2..."
-mysql -h $SERVER_IP -u root -p < DUMP_DIR/mysql_users.sql
+mysql -h $SERVER_IP -u root -p < DUMP_DIR/mysql_user/mysql_users.sql
 die_on_fail "Failed to source MySQL users"
 echo "MySQL users sourced successfully"

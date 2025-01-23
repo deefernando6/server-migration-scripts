@@ -2,6 +2,11 @@
 
 # Make sure to execute this script as root
 
+die_on_fail() {
+    if [ $? -ne 0 ]; then
+        echo "Error: $1"
+    fi
+}
 # Prompt for the location to save dumps on the current server
 read -p "Enter the directory to save database dumps on current server: " DUMP_DIR
 read -sp "Enter the mysql mysql root password of the migrated server: " DBPASS

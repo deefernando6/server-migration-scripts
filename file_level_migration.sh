@@ -2,6 +2,12 @@
 
 # Make sure to execute this script as root
 
+die_on_fail() {
+    if [ $? -ne 0 ]; then
+        echo "Error: $1"
+    fi
+}
+
 # Prompt for the server details
 read -p "Enter the local IP address of the migrating server: " SERVER_IP
 read -sp "Enter the root password of the migrated server: " SERVER_PASS
