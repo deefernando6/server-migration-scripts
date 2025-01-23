@@ -35,7 +35,7 @@ echo "MySQL users exported successfully"
 
 #Tranferring all the mysql dumps and the mysql users to the migration server.
 echo "Transferring MySQL users dump..."
-sshpass -p $SERVER_PASSrsync -av -o --append --progress -e "ssh -p 2112" $DUMP_DIR/ root@$SERVER_IP:$MIGRATE_DIR/
+sshpass -p $SERVER_PASSrsync -av -o --append --progress -e "ssh -p 2112" $DUMP_DIR/ root@$SERVER_IP:$DUMP_DIR/
 die_on_fail "Failed to transfer MySQL users dump"
 echo "MySQL users dump transferred successfully"
 
