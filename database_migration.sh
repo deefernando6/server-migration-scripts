@@ -34,7 +34,7 @@ die_on_fail "Failed to fetch database list from the current server"
 
 # Taking the mysql dumps 
 echo "Starting database dumps on the current server"
-for DB in $DATABASES; do
+for DB in "${DATABASES[@]}"; do
     echo "Taking dump of database: $DB..."
     mysqldump -h localhost -u root -p$DBPASS --triggers --routines --events --hex-blob $DB | sed 's/\`$DB\`\.//g' > $DUMP_DIR/${DB}.sql
     die_on_fail "Failed to take dump of database: $DB"
