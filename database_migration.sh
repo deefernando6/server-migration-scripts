@@ -9,7 +9,7 @@ die_on_fail() {
 }
 # Prompt for the location to save dumps on the current server
 read -p "Enter the directory to save database dumps on current server: " DUMP_DIR
-read -sp "Enter the mysql mysql root password of the migrated server: " DBPASS
+read -sp "Enter the mysql root password of the migrated server: " DBPASS
 # Prompt for the server details
 read -p "Enter the local IP address of the migrating server: " SERVER_IP
 read -sp "Enter the root user password of the migrated server: " SERVER_PASS
@@ -21,7 +21,11 @@ read -p "Enter the directory to save database dumps on migrated server: " MIGRAT
 read -p "Enter the directory to save the log on migrated server: " LOG_DIR
 
 #Creating the log files
+mkdir -p $LOG_DIR
 touch $LOG_DIR/database_migration.log
+
+#creating the dump directory
+mkdir -p $DUMP_DIR
 
 # Take dumps of all MariaDB databases on the current server
 echo "Fetching database list from the current server"
@@ -32,7 +36,7 @@ die_on_fail "Failed to fetch database list from the current server"
 echo "Starting database dumps on the current server"
 for DB in $DATABASES; do
     echo "Taking dump of database: $DB..."
-    mysqldump -h localhost -u root -p$DBPASS --triggers --routines --events --hex-blob $DB | sed 's/\`$DB\`\.//g' > $DUMP_DIR/${DB}_dump.sql
+    mysqldump -h localhost -u root -p$DBPASS --triggers --routines --events --hex-blob $DB | sed 's/\`$DB\`\.//g' > $DUMP_DIR/${DB}.sql
     die_on_fail "Failed to take dump of database: $DB"
     echo "Dump of database: $DB completed successfully" >> $LOG_DIR/database_migration.log
 done
@@ -43,7 +47,7 @@ touch $DUMP_DIR/mysql_user/mysql_users.sql
 
 #Exporting MySQL users
 echo "Exporting MySQL users from the current server..."
-"mysql -e -h localhost -u root -p$DBPASS 'SELECT CONCAT(\"CREATE USER '\", user, \"'@'\", host, \"' IDENTIFIED BY PASSWORD '\", authentication_string, \"';\") FROM mysql.user;' > $DUMP_DIR/mysql_user/mysql_users.sql"
+"mysql -u root -p -e "SELECT * FROM mysql.user;" > $DUMP_DIR/mysql_user/mysql_users.sql"
 die_on_fail "Failed to export MySQL users"
 echo "MySQL users exported successfully" >> $LOG_DIR/database_migration.log
 

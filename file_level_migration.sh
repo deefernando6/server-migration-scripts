@@ -21,13 +21,13 @@ touch $LOG_DIR/file_level_migration.log
 echo "Starting rsync of codebases from the current server to the migration server"
 
 # Getting all the codebases list from the current server to migration server
-DIRECTORIES=$(ls -d /var/www/html/OHRMStandalone/PROD/*/)
+DIRECTORIES=$(ls -d /var/www/html/OHRMStandalone/PROD/*)
 
 # Syncing the directories from current server to migration
-for DIR in $DIRECTORIES; do
+for DIR in "${DIRECTORIES[@]}"; do
     BASENAME=$(basename "$DIR")
     echo "Syncing directory: $BASENAME..."
-    sshpass -p $SERVER_PASS rsync -av -o --append --progress -e "ssh -p 2112" $DIR/ root@$SERVER_IP:/var/www/html/OHRMStandalone/PROD/
+    sshpass -p $SERVER_PASS rsync -av -o --append --progress -e "ssh -p 2112" $DIR/ root@$SERVER_IP:$DIR
     die_on_fail "Failed to sync directory: $BASENAME"
     echo "Directory: $BASENAME synced successfully" >> $LOG_DIR/file_level_migration.log
 done
