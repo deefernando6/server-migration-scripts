@@ -26,14 +26,15 @@ DATABASES=($(ls /data/backup-migration/*.sql | sed 's/\.sql$//' | xargs -n 1 bas
 
 # Sourcing the databases
 for DB in "${DATABASES[@]}"; do
+    mysql -u root -pE9kuFO3jrVpQ -e "DROP DATABASE $DB;"
     #echo "Creating database: $DB..."
-    #mysql -u root -pE9kuFO3jrVpQ -e "CREATE DATABASE $DB CHARACTER SET utf8 COLLATE utf8_general_ci;"
+    #mysql -u root -pX1Q0CoUOXeqQ -e "CREATE DATABASE $DB CHARACTER SET utf8 COLLATE utf8_general_ci;"
     #die_on_fail "Failed to create database: $DB"
-
-    echo "Sourcing dump for database: $DB..."
-    mysql -u root -pE9kuFO3jrVpQ $DB< /data/backup-migration/${DB}.sql
-    die_on_fail "Failed to source dump for database: $DB"
-    echo "Database: $DB sourced successfully" >> /home/dheegayu/server-migration/database_source.log
+#
+    #echo "Sourcing dump for database: $DB..."
+    #mysql -u root -pX1Q0CoUOXeqQ < /data/backup-migration/${DB}.sql
+    #die_on_fail "Failed to source dump for database: $DB"
+    #echo "Database: $DB sourced successfully" >> /home/dheegayu/server-migration/database_source.log
 done
 
 # Source MySQL users on Server2

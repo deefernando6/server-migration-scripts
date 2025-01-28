@@ -9,7 +9,7 @@ die_on_fail() {
 }
 # Prompt for the location to save dumps on the current server
 #read -p "Enter the directory to save database dumps on current server: " DUMP_DIR
-read -sp "Enter the mysql root password of the migrated server: " DBPASS
+#read -sp "Enter the mysql root password of the migrated server: " DBPASS
 ## Prompt for the server details
 #read -p "Enter the local IP address of the migrating server: " SERVER_IP
 #read -sp "Enter the root user password of the migrated server: " SERVER_PASS
@@ -21,11 +21,11 @@ read -sp "Enter the mysql root password of the migrated server: " DBPASS
 #read -p "Enter the directory to save the log on migrated server: " LOG_DIR
 
 #Creating the log files
-#mkdir -p $LOG_DIR
-#touch $LOG_DIR/database_migration.log
-#
-##creating the dump directory
-#mkdir -p $DUMP_DIR
+mkdir -p $LOG_DIR
+touch $LOG_DIR/database_migration.log
+
+#creating the dump directory
+mkdir -p $DUMP_DIR
 
 # Take dumps of all MariaDB databases on the current server
 echo "Fetching database list from the current server"
